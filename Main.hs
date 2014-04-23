@@ -18,16 +18,17 @@ keys = ["user", "title", "comments"]
 item v = 
   let user = T.unpack  $ v ^. ix "user" . ix "login" . _String
       title  = T.unpack . fromJust $ v ^? ix "title" ._String
+      number  = fromJust $ v ^? ix "number" ._Integer
       comments  = fromJust $ v ^? ix "comments" . _Integer
       body  = T.unpack . fromJust $ v ^? ix "body" . _String
-  in (user, title, comments, body)
+  in (user, number, title, comments, body)
 
 main = do
   r <- BL.getContents
   let v = fromJust  $ (decode  r :: Maybe Value)
   let xs = map item (v ^.. _Array . traverse . _Object)
-  mapM_ (\(u, t, c, _) -> 
-      printf "%-20s %-20.20s %20d\n" u t c 
+  mapM_ (\(u, n, t, c, _) -> 
+      printf "%-7d %-20s %-50.50s %20d\n" n u t c 
     ) xs
 
   
