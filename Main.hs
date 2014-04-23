@@ -1,7 +1,9 @@
 module Main where
 import qualified Data.ByteString.Lazy.Char8 as BL
+import Data.Aeson
+import Text.Printf
 
 main = do
   r <- BL.getContents
-  BL.putStrLn r
+  print $ (decode  r :: Maybe Value)
 
