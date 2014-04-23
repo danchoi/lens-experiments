@@ -10,3 +10,46 @@ pathToLens = foldl (.) id . map pathElem . filter (not . T.null)
     fromMap m = V.fromList [ IntMap.findWithDefault Null x m
                            | x <- [0 .. fst (IntMap.findMax m)]
 
+
+
+
+
+ghci> :m +Data.Aeson Data.Aeson.Lens
+ghci> :info Value
+data Value
+  = Object !Object
+  | Array !Array
+  | String !Data.Text.Internal.Text
+  | Number !Data.Scientific.Scientific
+  | Bool !Bool
+  | Null
+  	-- Defined in `aeson-0.7.0.3:Data.Aeson.Types.Internal'
+instance Eq Value
+  -- Defined in `aeson-0.7.0.3:Data.Aeson.Types.Internal'
+instance Show Value
+  -- Defined in `aeson-0.7.0.3:Data.Aeson.Types.Internal'
+instance [incoherent] ToJSON Value
+  -- Defined in `aeson-0.7.0.3:Data.Aeson.Types.Instances'
+instance [incoherent] FromJSON Value
+  -- Defined in `aeson-0.7.0.3:Data.Aeson.Types.Instances'
+instance AsValue Value -- Defined in `Data.Aeson.Lens'
+instance AsPrimitive Value -- Defined in `Data.Aeson.Lens'
+instance AsNumber Value -- Defined in `Data.Aeson.Lens'
+instance AsJSON Value -- Defined in `Data.Aeson.Lens'
+ghci> 
+
+
+
+
+
+
+     jsonToText (String s)   = [TextInput s]
+        jsonToText (Bool True)  = [TextInput "on"]
+        jsonToText (Bool False) = [TextInput "off"]
+        jsonToText (Number n)   = showPack n
+        jsonToText Null         = []
+        jsonToText (Object _)   = []
+        jsonToText (Array _)    = []
+
+        showPack = return . TextInput . T.pack . show
+
