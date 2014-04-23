@@ -27,7 +27,7 @@ main = do
   let v = fromJust  $ (decode  r :: Maybe Value)
   let xs = map item (v ^.. _Array . traverse . _Object)
   mapM_ (\(u, t, c, _) -> 
-      printf "%-20s %-70s %20d\n" u t c 
+      printf "%-20s %-20.20s %20d\n" u t c 
     ) xs
 
   
