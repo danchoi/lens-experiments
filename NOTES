@@ -1,0 +1,12 @@
+
+
+pathToLens :: [T.Text] -> Traversal' (Maybe Value) (Maybe Value)
+pathToLens = foldl (.) id . map pathElem . filter (not . T.null)
+  where
+    pathElem p = maybe (non (object []) . _Object . at p)
+                       (\n -> non (Array mempty) . _Array . iso toMap fromMap . at n)
+                       (readMay $ T.unpack p)
+    toMap = V.ifoldl' (\m i a -> IntMap.insert i a m) IntMap.empty
+    fromMap m = V.fromList [ IntMap.findWithDefault Null x m
+                           | x <- [0 .. fst (IntMap.findMax m)]
+
