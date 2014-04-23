@@ -12,8 +12,20 @@ import Data.Aeson.Lens
 import Data.Maybe
 import Control.Monad 
 import qualified Data.Text as T
+import Control.Applicative
 
 keys = ["user", "title", "comments"]
+
+
+data Issue = Issue {
+      title :: String,
+      user :: String 
+    }  deriving (Show)
+
+instance FromJSON Issue where
+  parseJSON (Object v) = Issue <$>
+      v .: "title" <*>
+      (v .: "user" >>= (.: "login"))
 
 item v = 
   let user = T.unpack  $ v ^. ix "user" . ix "login" . _String
@@ -31,5 +43,7 @@ main = do
       printf "%-7d %-20s %-50.50s %20d\n" n u t c 
     ) xs
 
+  let v' = (decode r :: Maybe [Issue])
+  print v'
   
 
