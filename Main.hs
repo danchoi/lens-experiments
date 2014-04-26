@@ -18,14 +18,16 @@ keys = ["user", "title", "comments"]
 
 
 data Issue = Issue {
-      title :: String,
-      user :: String 
+      title :: String
+    , user :: String
+    , labels :: [String]
     }  deriving (Show)
 
 instance FromJSON Issue where
   parseJSON (Object v) = Issue <$>
       v .: "title" <*>
-      (v .: "user" >>= (.: "login"))
+      (v .: "user" >>= (.: "login")) <*>
+      ( (v .: "labels" >>= mapM (.: "name")) <|> (pure []) )
 
 item v = 
   let user = T.unpack  $ v ^. ix "user" . ix "login" . _String
@@ -43,7 +45,7 @@ main = do
       printf "%d\t%s\t%s\t%d\n" n u t c 
     ) xs
 
-  -- let v' = (decode r :: Maybe [Issue])
-  -- print v'
+  let v' = (decode r :: Maybe [Issue])
+  print v'
   
 
