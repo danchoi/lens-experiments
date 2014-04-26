@@ -40,10 +40,10 @@ main = do
   let v = fromJust  $ (decode  r :: Maybe Value)
   let xs = map item (v ^.. _Array . traverse . _Object)
   mapM_ (\(u, n, t, c, _) -> 
-      printf "%-7d %-20s %-50.50s %20d\n" n u t c 
+      printf "%d\t%s\t%s\t%d\n" n u t c 
     ) xs
 
-  let v' = (decode r :: Maybe [Issue])
-  print v'
+  -- let v' = (decode r :: Maybe [Issue])
+  -- print v'
   
 

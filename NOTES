@@ -53,3 +53,7 @@ ghci>
 
         showPack = return . TextInput . T.pack . show
 
+
+[choi@sparta lens-experiments]$ ./.cabal-sandbox/bin/lens-experiments < <(./curl_ https://api.github.com/repos/MackeyRMS/mackey/issues ) | ../hnv/tsv.sh 
+
+
